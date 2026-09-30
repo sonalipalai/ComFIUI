@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "UI Auditor",
+  "version": "1.0.0",
+  "description": "Compare Figma designs with live web implementations using AI to find discrepancies in layout, spacing, typography, and visuals.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://openrouter.ai/*"
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "UI Auditor",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://openrouter.ai"
+  }
+}

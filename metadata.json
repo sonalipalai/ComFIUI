@@ -1,0 +1,8 @@
+{
+  "name": "UI Auditor",
+  "description": "Compare Figma designs with live implementations using AI to find discrepancies in layout, spacing, typography, and visuals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

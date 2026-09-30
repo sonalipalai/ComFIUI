@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UI Auditor</title>
+    <meta name="description" content="Compare Figma designs with live implementations using AI to find discrepancies in layout, spacing, typography, and visuals." />
+    <meta property="og:title" content="UI Auditor" />
+    <meta property="og:description" content="Compare Figma designs with live implementations using AI to find discrepancies in layout, spacing, typography, and visuals." />
+    <style>
+      /* Ensure extension popup and web view have proper sizing */
+      body {
+        min-width: 400px;
+        min-height: 600px;
+        margin: 0;
+      }
+      @media (min-width: 800px) {
+        body {
+          min-width: 800px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

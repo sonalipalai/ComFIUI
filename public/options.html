@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UI Auditor — Settings</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #060608;
+      color: #e4e4e7;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 520px;
+      width: 100%;
+      padding: 48px 40px;
+      background: linear-gradient(145deg, rgba(24,24,27,0.8), rgba(9,9,11,0.95));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #3b82f6, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 0 20px rgba(59,130,246,0.3);
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-text p {
+      font-size: 10px;
+      color: #71717a;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #a1a1aa;
+      margin-bottom: 8px;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(9,9,11,0.8);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      font-family: 'Inter', monospace;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: rgba(59,130,246,0.5);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #52525b;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .hint a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    .hint a:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      margin-top: 24px;
+      width: 100%;
+      padding: 14px;
+      background: #2563eb;
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      background: #3b82f6;
+      box-shadow: 0 0 25px rgba(59,130,246,0.4);
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .status.success {
+      display: block;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.2);
+      color: #34d399;
+    }
+
+    .status.error {
+      display: block;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: #f87171;
+    }
+
+    .toggle-vis {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #71717a;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+    }
+
+    .toggle-vis:hover {
+      color: white;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .model-badge {
+      margin-top: 20px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.15);
+      font-size: 11px;
+      color: #93c5fd;
+      font-weight: 600;
+    }
+
+    .model-badge span {
+      color: #60a5fa;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-row">
+      <div class="logo-icon">UI</div>
+      <div class="logo-text">
+        <h1>UI Auditor</h1>
+        <p>Extension Settings</p>
+      </div>
+    </div>
+
+    <label for="apiKey">OpenRouter API Key</label>
+    <div class="input-wrapper">
+      <input type="password" id="apiKey" placeholder="sk-or-v1-..." autocomplete="off" />
+      <button class="toggle-vis" id="toggleVis" type="button">SHOW</button>
+    </div>
+    <p class="hint">
+      Get your API key from
+      <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">OpenRouter</a>.
+      Your key is stored locally in your browser and never sent anywhere except the OpenRouter API.
+    </p>
+
+    <div class="model-badge">
+      Model: <span>GPT 5.6 Luna</span> via OpenRouter
+    </div>
+
+    <button class="btn" id="saveBtn">Save API Key</button>
+
+    <div class="status" id="status"></div>
+  </div>
+
+  <script>
+    const input = document.getElementById('apiKey');
+    const saveBtn = document.getElementById('saveBtn');
+    const statusEl = document.getElementById('status');
+    const toggleBtn = document.getElementById('toggleVis');
+
+    // Load existing key on page open
+    chrome.storage.sync.get(['openrouterApiKey'], (result) => {
+      if (result.openrouterApiKey) {
+        input.value = result.openrouterApiKey;
+      }
+    });
+
+    // Toggle password visibility
+    toggleBtn.addEventListener('click', () => {
+      if (input.type === 'password') {
+        input.type = 'text';
+        toggleBtn.textContent = 'HIDE';
+      } else {
+        input.type = 'password';
+        toggleBtn.textContent = 'SHOW';
+      }
+    });
+
+    // Save key
+    saveBtn.addEventListener('click', () => {
+      const key = input.value.trim();
+      if (!key) {
+        statusEl.className = 'status error';
+        statusEl.textContent = '✕ Please enter an API key.';
+        return;
+      }
+
+      chrome.storage.sync.set({ openrouterApiKey: key }, () => {
+        statusEl.className = 'status success';
+        statusEl.textContent = '✓ API key saved successfully. You can close this page.';
+        setTimeout(() => {
+          statusEl.className = 'status';
+        }, 4000);
+      });
+    });
+
+    // Save on Enter
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveBtn.click();
+    });
+  </script>
+</body>
+</html>
