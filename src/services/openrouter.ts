@@ -1,12 +1,12 @@
 /**
  * OpenRouter API service for UI Auditor.
  * Calls OpenRouter (OpenAI-compatible) API directly — no backend server needed in extension mode.
- * Uses GPT 5.6 Luna via OpenRouter.
- * The API key is stored in chrome.storage.sync via the options page.
+ * Default model: GPT-5.6 Luna via OpenRouter (overridable on the options page).
+ * The API key and model are stored in chrome.storage.sync via the options page.
  */
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL_NAME = 'openai/gpt-5.6-luna';
+const DEFAULT_MODEL = 'openai/gpt-5.6-luna';
 
 /**
  * Retrieves the stored OpenRouter API key from chrome.storage.
@@ -17,7 +17,7 @@ async function getApiKey(): Promise<string> {
     return new Promise((resolve, reject) => {
       chrome.storage.sync.get(['openrouterApiKey'], (result) => {
         if (result.openrouterApiKey) {
-          resolve(result.openrouterApiKey);
+          resolve(String(result.openrouterApiKey));
         } else {
           reject(new Error('No API key configured. Please set your OpenRouter API key in the extension options (right-click the extension icon → Options).'));
         }
@@ -25,6 +25,20 @@ async function getApiKey(): Promise<string> {
     });
   }
   throw new Error('Chrome storage not available. Please use the extension in a supported browser.');
+}
+
+/**
+ * Retrieves the model slug chosen on the options page, or the default.
+ */
+async function getModel(): Promise<string> {
+  if (typeof chrome !== 'undefined' && chrome.storage?.sync) {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(['openrouterModel'], (result) => {
+        resolve(String(result.openrouterModel || '').trim() || DEFAULT_MODEL);
+      });
+    });
+  }
+  return DEFAULT_MODEL;
 }
 
 /**
@@ -50,6 +64,7 @@ async function callOpenRouterAPI(params: {
   messages: any[];
 }): Promise<string> {
   const { apiKey, messages } = params;
+  const model = await getModel();
 
   const response = await fetch(OPENROUTER_API_URL, {
     method: 'POST',
@@ -60,7 +75,7 @@ async function callOpenRouterAPI(params: {
       'X-Title': 'UI Auditor',
     },
     body: JSON.stringify({
-      model: MODEL_NAME,
+      model,
       messages,
       max_tokens: 4096,
     }),

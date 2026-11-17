@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Send, User, Bot, Loader2, Sparkles, MessageSquare } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { sendChatMessage, ChatMessage } from '../services/gemini';
+import { sendChatMessage, ChatMessage } from '../services/openrouter';
 import { cn } from '../lib/utils';
 
 interface ChatProps {
