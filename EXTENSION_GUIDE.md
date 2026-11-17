@@ -1,41 +1,48 @@
-# How to Load UI Auditor as a Browser Extension
+# UI Auditor — Browser Extension Guide
 
-This application is ready to be used as a Chrome/Edge browser extension. It works **fully standalone** — no backend server needed. All AI calls go directly to the Gemini API from the extension.
+The extension works **fully standalone**: no backend server needed. AI calls go straight from the extension to the [OpenRouter](https://openrouter.ai) API using the key you save on the Options page.
 
-## 1. Build the Project
-First, generate the production build:
+## 1. Build
 ```bash
+npm install
 npm run build
 ```
-This will create a `dist` folder in your project root with all extension files.
+This creates `dist/` containing `manifest.json`, `index.html` (the popup), `options.html`, icons and assets.
 
-## 2. Open Browser Extensions Page
-- In Chrome: Go to `chrome://extensions/`
-- In Edge: Go to `edge://extensions/`
+## 2. Load it (for yourself / testing)
+1. Go to `chrome://extensions/` (Edge: `edge://extensions/`, Brave: `brave://extensions/`).
+2. Turn on **Developer mode** (top right).
+3. Click **Load unpacked** and select the `dist` folder.
+4. After code changes, run `npm run build` again and click the **↻ reload** icon on the extension card.
 
-## 3. Enable Developer Mode
-Toggle the **Developer mode** switch in the top right corner of the extensions page.
+## 3. Configure OpenRouter
+1. Right-click the **UI Auditor** toolbar icon → **Options**.
+2. Paste your **OpenRouter API key** (create one at https://openrouter.ai/keys and add a few dollars of credit).
+3. Optional: enter a different **model** slug, any vision-capable model from https://openrouter.ai/models?input_modalities=image. Leave blank for `openai/gpt-5.6-luna`.
+4. Click **Save Settings**.
 
-## 4. Load Unpacked Extension
-1. Click the **Load unpacked** button.
-2. Navigate to your project folder and select the `dist` directory.
+## 4. Use
+1. Pin UI Auditor from the puzzle-piece menu.
+2. Open the page you want to audit and click the icon.
+3. Upload the Figma export, click **Capture Current Tab**, then **Run UI Audit**.
 
-## 5. Configure Your API Key
-1. Right-click the **UI Auditor** extension icon in the toolbar.
-2. Select **Options** (or go to the extension's details page and click "Extension options").
-3. Enter your **Gemini API Key** (get one free from [Google AI Studio](https://aistudio.google.com/apikey)).
-4. Click **Save API Key**.
+## 5. Share it without the store
+- Run `npm run zip:ext` to get `ui-auditor-extension.zip`.
+- Teammates unzip it and use **Load unpacked** (step 2). Each person enters their own OpenRouter key.
 
-## 6. Pin and Use
-1. Click the puzzle icon (Extensions) in your browser toolbar.
-2. Pin **UI Auditor**.
-3. Open any website you want to audit.
-4. Click the UI Auditor icon.
-5. Upload your Figma design image.
-6. Click **Capture Current Tab** to automatically grab the web implementation.
-7. Click **Run UI Audit** to get your results!
+## 6. Publish to the Chrome Web Store
+1. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) (one-time US$5 fee).
+2. Bump `"version"` in `public/manifest.json` for every upload, then run `npm run zip:ext`.
+3. In the dashboard, click **New item** and upload `ui-auditor-extension.zip`. The zip must contain `manifest.json` at its root, which the script already handles.
+4. Fill in the listing: description, 128×128 icon, at least one 1280×800 screenshot, and category (Developer Tools).
+5. **Privacy tab:** say that screenshots and uploaded images are sent to OpenRouter for analysis, that the API key is stored locally in `chrome.storage`, and that no data is sold. You'll need a public **privacy policy URL** (a GitHub Pages or Notion page is fine).
+6. **Permission justifications:**
+   - `activeTab` / `tabs`: capture a screenshot of the current tab for comparison
+   - `storage`: save the user's OpenRouter API key and model choice
+   - host `https://openrouter.ai/*`: send images to the AI model for analysis
+7. Submit for review. It usually takes a few days. Updates go through the same steps with a higher version number.
 
----
+**Microsoft Edge Add-ons:** upload the same zip at https://partner.microsoft.com/dashboard/microsoftedge (free developer account).
 
-### Permissions Note
-The extension requires `activeTab` and `scripting` permissions to capture screenshots of the pages you are auditing. It also uses `storage` to securely save your API key locally, and connects to `generativelanguage.googleapis.com` for Gemini AI calls. All permissions are defined in the `manifest.json` file.
+## Permissions
+Defined in `public/manifest.json`: `activeTab`, `tabs`, `storage`, and host access to `https://openrouter.ai/*`. The CSP allows network connections only to OpenRouter.

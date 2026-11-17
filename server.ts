@@ -3,6 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
+// Load .env.local first (local overrides), then .env
+dotenv.config({ path: '.env.local' });
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,18 +20,24 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // OpenRouter configuration
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const MODEL_NAME = 'openai/gpt-5.6-luna';
+// Any vision-capable model slug from https://openrouter.ai/models works here
+const MODEL_NAME = process.env.OPENROUTER_MODEL || 'openai/gpt-5.6-luna';
+const APP_URL = process.env.APP_URL || 'https://ui-auditor.app';
 
 /**
  * Helper: call OpenRouter API (OpenAI-compatible chat completions).
  */
 async function callOpenRouter(messages: any[]): Promise<string> {
+  if (!OPENROUTER_API_KEY) {
+    throw new Error('OPENROUTER_API_KEY is not set. Add it to .env.local (see .env.example).');
+  }
+
   const response = await fetch(OPENROUTER_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-      'HTTP-Referer': 'https://ui-auditor.app',
+      'HTTP-Referer': APP_URL,
       'X-Title': 'UI Auditor',
     },
     body: JSON.stringify({

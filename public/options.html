@@ -216,11 +216,19 @@
       Your key is stored locally in your browser and never sent anywhere except the OpenRouter API.
     </p>
 
+    <label for="model" style="margin-top: 24px;">Model (optional)</label>
+    <input type="text" id="model" placeholder="openai/gpt-5.6-luna" autocomplete="off" />
+    <p class="hint">
+      Any vision-capable model slug from
+      <a href="https://openrouter.ai/models?input_modalities=image" target="_blank" rel="noopener noreferrer">openrouter.ai/models</a>.
+      Leave blank for the default.
+    </p>
+
     <div class="model-badge">
-      Model: <span>GPT 5.6 Luna</span> via OpenRouter
+      Active model: <span id="modelLabel">openai/gpt-5.6-luna</span> via OpenRouter
     </div>
 
-    <button class="btn" id="saveBtn">Save API Key</button>
+    <button class="btn" id="saveBtn">Save Settings</button>
 
     <div class="status" id="status"></div>
   </div>
@@ -230,12 +238,19 @@
     const saveBtn = document.getElementById('saveBtn');
     const statusEl = document.getElementById('status');
     const toggleBtn = document.getElementById('toggleVis');
+    const modelInput = document.getElementById('model');
+    const modelLabel = document.getElementById('modelLabel');
+    const DEFAULT_MODEL = 'openai/gpt-5.6-luna';
 
-    // Load existing key on page open
-    chrome.storage.sync.get(['openrouterApiKey'], (result) => {
+    // Load existing settings on page open
+    chrome.storage.sync.get(['openrouterApiKey', 'openrouterModel'], (result) => {
       if (result.openrouterApiKey) {
         input.value = result.openrouterApiKey;
       }
+      if (result.openrouterModel) {
+        modelInput.value = result.openrouterModel;
+      }
+      modelLabel.textContent = result.openrouterModel || DEFAULT_MODEL;
     });
 
     // Toggle password visibility
@@ -258,9 +273,11 @@
         return;
       }
 
-      chrome.storage.sync.set({ openrouterApiKey: key }, () => {
+      const model = modelInput.value.trim();
+      chrome.storage.sync.set({ openrouterApiKey: key, openrouterModel: model }, () => {
+        modelLabel.textContent = model || DEFAULT_MODEL;
         statusEl.className = 'status success';
-        statusEl.textContent = '✓ API key saved successfully. You can close this page.';
+        statusEl.textContent = '✓ Settings saved. You can close this page.';
         setTimeout(() => {
           statusEl.className = 'status';
         }, 4000);
@@ -268,9 +285,9 @@
     });
 
     // Save on Enter
-    input.addEventListener('keydown', (e) => {
+    [input, modelInput].forEach((el) => el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') saveBtn.click();
-    });
+    }));
   </script>
 </body>
 </html>

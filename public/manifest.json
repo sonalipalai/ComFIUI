@@ -5,7 +5,6 @@
   "description": "Compare Figma designs with live web implementations using AI to find discrepancies in layout, spacing, typography, and visuals.",
   "permissions": [
     "activeTab",
-    "scripting",
     "storage",
     "tabs"
   ],

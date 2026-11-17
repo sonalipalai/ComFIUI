@@ -8,12 +8,12 @@
     "build": "vite build",
     "build:ext": "vite build && echo Extension built in dist/ — load it via chrome://extensions",
     "preview": "vite preview",
-    "start": "node server.ts",
+    "start": "NODE_ENV=production tsx server.ts",
+    "zip:ext": "npm run build && cd dist && zip -r ../ui-auditor-extension.zip . -x '.*'",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@google/genai": "^1.29.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",

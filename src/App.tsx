@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { ImageUpload } from './components/ImageUpload';
 import { ComparisonView } from './components/ComparisonView';
 import { Chat } from './components/Chat';
-import { runUIAudit } from './services/gemini';
+import { runUIAudit } from './services/openrouter';
 import { isExtension, captureCurrentTab } from './services/extension';
 import { cn } from './lib/utils';
 
@@ -102,7 +102,7 @@ export default function App() {
               )}
             >
               <MessageSquare size={13} />
-              CHAT WITH GEMINI
+              CHAT WITH AI
               {auditResult && (
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500 absolute -top-0.5 -right-0.5 animate-pulse" />
               )}
@@ -281,7 +281,7 @@ export default function App() {
                   {isAnalyzing ? (
                     <>
                       <Loader2 className="animate-spin" size={16} />
-                      AUDITING WITH GEMINI...
+                      AUDITING WITH AI...
                     </>
                   ) : (
                     <>
@@ -384,7 +384,7 @@ export default function App() {
                             className="w-full py-2.5 px-4 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl border border-white/10 text-xs font-bold transition-all flex items-center justify-center gap-2 mt-2"
                           >
                             <MessageSquare size={13} className="text-blue-400" />
-                            ASK GEMINI IN CHAT TAB
+                            ASK AI IN CHAT TAB
                           </button>
                         </div>
                       </div>
